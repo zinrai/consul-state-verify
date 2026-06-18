@@ -1,0 +1,48 @@
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: consul-state-dump
+    main: ./cmd/consul-state-dump
+    binary: consul-state-dump
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+
+  - id: consul-state-diff
+    main: ./cmd/consul-state-diff
+    binary: consul-state-diff
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+
+archives:
+  - formats:
+      - binary
+
+changelog:
+  sort: desc
+
+release:
+  draft: false
